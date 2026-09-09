@@ -31,10 +31,8 @@ namespace clouds_unit
 
     void Init()
     {
-      // Zero entire struct — GranularProcessor has no constructor,
-      // original firmware relies on BSS zero-init for globals
-      memset(this, 0, sizeof(Internal));
       cachedMode = -1;
+      lastTrig = false;
       processor.Init(large_buffer, sizeof(large_buffer),
                      small_buffer, sizeof(small_buffer));
       processor.set_playback_mode(clouds::PLAYBACK_MODE_GRANULAR);

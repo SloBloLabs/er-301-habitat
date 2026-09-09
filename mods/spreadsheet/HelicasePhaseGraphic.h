@@ -254,10 +254,6 @@ namespace stolmine
       }
 
       // Full field evaluation frame
-      float radX = (float)w * 0.5f;
-      float radY = (float)h * 0.5f;
-      float invRx = 1.0f / (radX > 1.0f ? radX : 1.0f);
-      float invRy = 1.0f / (radY > 1.0f ? radY : 1.0f);
       float blobR2 = 0.04f;  // tight radius, distinct blobs
       float invBlobR2 = 1.0f / blobR2;
 

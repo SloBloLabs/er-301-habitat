@@ -303,7 +303,11 @@ namespace stolmine
 // -msse4) do not rewrite the block-rate pow() into a libmvec vector call
 // (_ZGVbN4v_expf, undefined at load) - and, per feedback_disable_tree_vectorize
 // _am335x, so the am335x build never emits trapping auto-vectorized code.
+#if defined(__GNUC__) && !defined(__clang__)
 #define ZAUM_NO_VECTORIZE __attribute__((optimize("no-tree-vectorize")))
+#else
+#define ZAUM_NO_VECTORIZE
+#endif
 #endif
   static ZAUM_ALWAYS_INLINE void allpassNestedStepF(
       float xNow, float vDelayed, float g, float &vNew, float &yOut)

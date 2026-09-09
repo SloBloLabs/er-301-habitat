@@ -185,7 +185,6 @@ namespace stolmine
           // float rz = -nx * sinA + nz * cosA; // depth (unused for now)
 
           // Slight tilt around X axis for 2.5D feel
-          float tilt = 0.3f;
           float costilt = 0.9553f; // cos(0.3)
           float sintilt = 0.2955f; // sin(0.3)
           float fy = ry * costilt - (-nx * sinA + nz * cosA) * sintilt;

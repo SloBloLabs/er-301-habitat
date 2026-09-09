@@ -181,7 +181,6 @@ namespace house
       const float maxCut = kMaxCut[ch - 1];
       const float drive = kDrive[ch - 1];
       const float qScale = kQScale[ch - 1];
-      const bool parallel = (ch == 3);
 
       // Coefficients are baked ONCE PER BLOCK, never per sample: the
       // bake contains tan(), pow() and a divide.

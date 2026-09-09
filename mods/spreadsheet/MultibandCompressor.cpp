@@ -31,6 +31,8 @@
 #include <hal/ops.h>
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
+#include <new>
 
 #include <pffft.h>
 
@@ -190,7 +192,10 @@ namespace stolmine
     mAutoMakeup.enableSerialization();
     mEnableSidechain.enableSerialization();
 
-    mpInternal = new Internal();
+    void *mem = 0;
+    if (posix_memalign(&mem, 16, sizeof(Internal)) != 0 || !mem)
+      throw std::bad_alloc();
+    mpInternal = new (mem) Internal();
     mpInternal->Init();
 
     for (int b = 0; b < 3; b++)
@@ -208,7 +213,8 @@ namespace stolmine
   MultibandCompressor::~MultibandCompressor()
   {
     mpInternal->Cleanup();
-    delete mpInternal;
+    mpInternal->~Internal();
+    free(mpInternal);
   }
 
   // --- SWIG-visible ---

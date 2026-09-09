@@ -34,7 +34,6 @@ namespace stolmine
     {
       // Map phase [0, 1) to t [-1, +1] then sin(πt).
       const float t = 2.0f * phase - 1.0f;
-      const float t2 = t * t;
       // Polynomial approximation to sin(π*t)/(π*t) * πt = sin(πt).
       // Bhaskara I: sin(πt) ≈ 16t(1-|t|) / (5 - 4|t|(1-|t|))
       const float at = t < 0.0f ? -t : t;

@@ -101,12 +101,20 @@ namespace stolmine
   } // namespace alembic_lut
 
 #ifndef SWIGLUA
+#if defined(__GNUC__) && !defined(__clang__)
+#define ER301_NOINLINE_NO_TREE_VECTORIZE __attribute__((noinline, optimize("no-tree-vectorize")))
+#define ER301_OPTIMIZE_O1 __attribute__((optimize("O1")))
+#else
+#define ER301_NOINLINE_NO_TREE_VECTORIZE
+#define ER301_OPTIMIZE_O1
+#endif
+
   // ---- Fibonacci-table fill (called from ctor). Marked noinline +
   // no-tree-vectorize so gcc doesn't auto-vec the init into :64 NEON
   // stores per feedback_neon_hint_surfaces. Static (TU-local). Hidden
   // from SWIG (uses reference-to-array params + GCC attributes that
   // SWIG can't parse).
-  __attribute__((noinline, optimize("no-tree-vectorize")))
+  ER301_NOINLINE_NO_TREE_VECTORIZE
   static void alembicSphereFillFibonacciTables(
       float (&x0)[64], float (&y0)[64], float (&z0)[64],
       float (&trX)[64], float (&trY)[64])
@@ -185,7 +193,7 @@ namespace stolmine
 
     // Per-frame draw. Header-inline (no key function) so the vtable is
     // COMDAT-emitted in every TU per feedback_no_out_of_line_virtuals.
-    __attribute__((optimize("no-tree-vectorize")))
+    ER301_NOINLINE_NO_TREE_VECTORIZE
     virtual void draw(od::FrameBuffer &fb)
     {
       if (!mpAlembic) return;
@@ -258,7 +266,6 @@ namespace stolmine
 
       const float outerR = 1.0f + maxLift * liftAmount;
       const float outerR2 = outerR * outerR;
-      const float invOuterR = 1.0f / outerR;
 
       // Cache key: rotation buckets only. scanNode does NOT invalidate
       // the cache because per-pixel brightness is recomputed each frame
@@ -441,7 +448,7 @@ namespace stolmine
     // 165-249, but stores (kind, cell) into the cache instead of gray.
     // Per-pixel decisions follow the same shell tests, edge thresholds,
     // and lift comparisons.
-    __attribute__((optimize("no-tree-vectorize")))
+    ER301_NOINLINE_NO_TREE_VECTORIZE
     void refreshCacheSlice(int rowStart, int rowEnd,
                            float outerR2, float invOuterR)
     {

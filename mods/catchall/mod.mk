@@ -81,6 +81,7 @@ CFLAGS += $(CFLAGS.common) $(CFLAGS.$(ARCH)) $(CFLAGS.$(PROFILE))
 CFLAGS += $(addprefix -I,$(INCLUDES))
 CFLAGS += $(addprefix -D,$(SYMBOLS))
 CFLAGS += -Wno-unused-variable -Wno-unused-parameter -Wno-sign-compare
+CXXFLAGS = $(CFLAGS)
 # Append am335x NEON-safety overrides LAST so they win against any
 # -ftree-vectorize that came from CFLAGS.speed earlier in the line.
 # See feedback_disable_tree_vectorize_am335x — TOP-PRIORITY rule.
@@ -93,13 +94,13 @@ ifneq ($(filter $(ARCH),am335x linux),)
 CFLAGS += -fno-tree-vectorize
 endif
 
-SWIGFLAGS = -lua -no-old-metatable-bindings -nomoduleglobal -small -fvirtual
+SWIGFLAGS = -lua -nomoduleglobal -small -fvirtual
 SWIGFLAGS += $(addprefix -I,$(INCLUDES))
 
 CFLAGS.swig = $(CFLAGS.common) $(CFLAGS.$(ARCH)) $(CFLAGS.size)
 CFLAGS.swig += $(addprefix -I,$(INCLUDES)) -I$(SDKPATH)/libs/lua54
 CFLAGS.swig += $(addprefix -D,$(SYMBOLS))
-CFLAGS.swig += -include cstdint
+CFLAGS.swig += -include cstdint -Wno-sign-compare
 
 all: $(PACKAGE_FILE)
 

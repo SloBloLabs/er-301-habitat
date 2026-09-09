@@ -33,6 +33,12 @@
 namespace stolmine
 {
 
+#if defined(__GNUC__) && !defined(__clang__)
+#define ER301_NO_TREE_VECTORIZE __attribute__((optimize("no-tree-vectorize")))
+#else
+#define ER301_NO_TREE_VECTORIZE
+#endif
+
   class Visadhara : public od::Object
   {
   public:
@@ -190,7 +196,7 @@ namespace stolmine
     // relax as it decays. Same PIMPL-read pattern as vizTriggerCount.
     float vizEnvLevel() const { return mpInternal->finalEnv; }
 
-    __attribute__((optimize("no-tree-vectorize")))
+    ER301_NO_TREE_VECTORIZE
     virtual void process()
     {
       Internal &s = *mpInternal;

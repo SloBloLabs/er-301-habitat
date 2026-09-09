@@ -373,7 +373,6 @@ namespace stolmine
         return start;
       }
 
-      BSPNode &last = mTree[mLeafIndices[mLastActivatedLeaf]];
       float lastCx, lastCy;
       leafCenter(mLastActivatedLeaf, lastCx, lastCy);
 

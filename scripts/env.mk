@@ -16,7 +16,12 @@ ifndef ARCH
 endif
 
 ifeq ($(ARCH),am335x)
-  TI_INSTALL_DIR ?= $(HOME)/ti
+  ifeq ($(shell uname -s),Darwin)
+    HOMEBREW_PREFIX := $(shell if [ -d /opt/homebrew ]; then echo /opt/homebrew; else echo /usr/local; fi)
+    TI_INSTALL_DIR ?= $(HOMEBREW_PREFIX)
+  else
+    TI_INSTALL_DIR ?= $(HOME)/ti
+  endif
   include $(SDKPATH)/scripts/am335x.mk
 endif
 

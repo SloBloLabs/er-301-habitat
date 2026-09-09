@@ -205,7 +205,12 @@ namespace stolmine
   // feedback_neon_intrinsics_drumvoice / Pecto.cpp:24-28 pattern).
   // Wrapped in SWIGLUA guard — SWIG can't parse the GCC attribute.
 #ifndef SWIGLUA
-  __attribute__((noinline, optimize("no-tree-vectorize")))
+#if defined(__GNUC__) && !defined(__clang__)
+#define ER301_NETWORK_COPY_NO_TREE_VECTORIZE __attribute__((noinline, optimize("no-tree-vectorize")))
+#else
+#define ER301_NETWORK_COPY_NO_TREE_VECTORIZE
+#endif
+  [[maybe_unused]] ER301_NETWORK_COPY_NO_TREE_VECTORIZE
   static void networkCopyFloatArray(float *dst, const float *src, int n)
   {
     for (int i = 0; i < n; i++) dst[i] = src[i];

@@ -55,7 +55,6 @@ static inline uint16_t toBip(float v) {
     addParameter(mParam3);                                                   \
     addParameter(mParam4);                                                   \
     mpInternal = new Internal();                                             \
-    memset(mpInternal, 0, sizeof(Internal));                                 \
     mpInternal->processor.Init();                                            \
     mpInternal->previousGate = peaks::GATE_FLAG_LOW;                         \
     InitExtra                                                                \
@@ -95,7 +94,6 @@ static inline uint16_t toBip(float v) {
     addParameter(mParam3);                                                   \
     addParameter(mParam4);                                                   \
     mpInternal = new Internal();                                             \
-    memset(mpInternal, 0, sizeof(Internal));                                 \
     mpInternal->processor.Init();                                            \
     mpInternal->previousClock = peaks::GATE_FLAG_LOW;                        \
     mpInternal->previousReset = peaks::GATE_FLAG_LOW;                        \
@@ -153,7 +151,6 @@ static inline uint16_t toBip(float v) {
     addParameter(mParam3);                                                   \
     addParameter(mParam4);                                                   \
     mpInternal = new Internal();                                             \
-    memset(mpInternal, 0, sizeof(Internal));                                 \
     mpInternal->processor.Init();                                            \
     mpInternal->previousReset = peaks::GATE_FLAG_LOW;                        \
     InitExtra                                                                \

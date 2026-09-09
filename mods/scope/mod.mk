@@ -75,6 +75,7 @@ endif
 CFLAGS += $(CFLAGS.common) $(CFLAGS.$(ARCH)) $(CFLAGS.$(PROFILE))
 CFLAGS += $(addprefix -I,$(INCLUDES))
 CFLAGS += -Wno-unused-variable -Wno-unused-parameter
+CXXFLAGS = $(CFLAGS)
 # Append am335x NEON-safety overrides LAST so they win against any
 # -ftree-vectorize that came from CFLAGS.speed earlier in the line.
 # See feedback_disable_tree_vectorize_am335x — TOP-PRIORITY rule.
@@ -87,12 +88,12 @@ ifneq ($(filter $(ARCH),am335x linux),)
 CFLAGS += -fno-tree-vectorize
 endif
 
-SWIGFLAGS = -lua -no-old-metatable-bindings -nomoduleglobal -small -fvirtual
+SWIGFLAGS = -lua -nomoduleglobal -small -fvirtual
 SWIGFLAGS += $(addprefix -I,$(INCLUDES))
 
 CFLAGS.swig = $(CFLAGS.common) $(CFLAGS.$(ARCH)) $(CFLAGS.size)
 CFLAGS.swig += $(addprefix -I,$(INCLUDES)) -I$(SDKPATH)/libs/lua54
-CFLAGS.swig += -include cstdint
+CFLAGS.swig += -include cstdint -Wno-sign-compare
 
 all: $(PACKAGE_FILE)
 
@@ -111,7 +112,7 @@ $(PACKAGE_FILE): $(LIB_FILE) $(ASSETS)
 $(OUT_DIR)/%.o: %.cpp
 	@echo [C++ $<]
 	@mkdir -p $(@D)
-	@$(CPP) $(CFLAGS) -std=gnu++11 -c $< -o $@
+	@$(CPP) $(CXXFLAGS) -std=gnu++11 -c $< -o $@
 
 $(OUT_DIR)/%.o: %.c
 	@echo [CC $<]

@@ -343,7 +343,10 @@ namespace stolmine
     mBandMute1.enableSerialization();
     mBandMute2.enableSerialization();
 
-    mpInternal = new Internal();
+    void *mem = 0;
+    if (posix_memalign(&mem, 16, sizeof(Internal)) != 0 || !mem)
+      throw std::bad_alloc();
+    mpInternal = new (mem) Internal();
     mpInternal->Init();
 
     for (int i = 0; i < 3; i++)
@@ -360,7 +363,8 @@ namespace stolmine
   MultibandSaturator::~MultibandSaturator()
   {
     mpInternal->Cleanup();
-    delete mpInternal;
+    mpInternal->~Internal();
+    free(mpInternal);
   }
 
   // --- Crossover frequency derivation (from Etcher weight/skew pattern) ---

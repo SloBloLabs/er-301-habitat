@@ -15,6 +15,14 @@
 namespace stolmine
 {
 
+#if defined(__GNUC__) && !defined(__clang__)
+#define ER301_NOINLINE_NO_TREE_VECTORIZE __attribute__((noinline, optimize("no-tree-vectorize")))
+#define ER301_OPTIMIZE_O1 __attribute__((optimize("O1")))
+#else
+#define ER301_NOINLINE_NO_TREE_VECTORIZE
+#define ER301_OPTIMIZE_O1
+#endif
+
   static const float kTwoPi = 6.28318530718f;
   static const float kLn2 = 0.69314718056f;
   // ln(200) for cutoff exp-mapping: cutoff_Hz = 40 * exp(fc * 5.298)
@@ -52,7 +60,7 @@ namespace stolmine
   // Wide soft-clip from Som.cpp:40-47. Linear pass-through in (-8, +8),
   // tanh asymptote beyond. Preserves high-Q filter swing internally
   // while bounding integrator state so feedback can't run away.
-  static inline float wideSoftClip(float x)
+  [[maybe_unused]] static inline float wideSoftClip(float x)
   {
     if (!isfinite(x)) return 0.0f;
     const float ax = x < 0.0f ? -x : x;
@@ -87,7 +95,7 @@ namespace stolmine
   // tap-init loop. Without this attribute gcc auto-vectorizes the loop
   // and emits quad-D vst1.64 :64 hints into class member arrays, which
   // trap on Cortex-A8 per feedback_neon_intrinsics_drumvoice.
-  __attribute__((noinline, optimize("no-tree-vectorize")))
+  ER301_NOINLINE_NO_TREE_VECTORIZE
   static void initCombTapDefaults(float *pos, float *weight, int n)
   {
     for (int i = 0; i < n; i++)
@@ -103,7 +111,7 @@ namespace stolmine
   // explicit NEON intrinsics intentionally (mirrors Pecto's shipped
   // code) and those :64 hints are accepted; this scalar loop's hints
   // would be NEW.
-  __attribute__((noinline, optimize("no-tree-vectorize")))
+  ER301_NOINLINE_NO_TREE_VECTORIZE
   static void cacheCombTapDelays(const float *tapPos, const float *tapWeight,
                                   float *cachedDelay, float *cachedWeight,
                                   float baseDelay, int density)
@@ -140,7 +148,7 @@ namespace stolmine
     return (float)buf[idx] * (1.0f / 32767.0f);
   }
 
-  static inline float combBufReadInterp(const int16_t *buf, float pos, int maxDelay)
+  [[maybe_unused]] static inline float combBufReadInterp(const int16_t *buf, float pos, int maxDelay)
   {
     int idx0 = (int)floorf(pos);
     const float frac = pos - (float)idx0;
@@ -159,7 +167,7 @@ namespace stolmine
   // tap position so the last tap is the longest delay (feedback
   // source). Lift verbatim so the comb's character matches Pecto's
   // exactly when the trained controls hit the same values.
-  __attribute__((optimize("O1")))
+  ER301_OPTIMIZE_O1
   static void combComputePattern(float *pos, int density, int basePattern)
   {
     const int N = density;
@@ -235,7 +243,7 @@ namespace stolmine
     }
   }
 
-  __attribute__((optimize("O1")))
+  ER301_OPTIMIZE_O1
   static void combPerturbPattern(float *pos, int density, unsigned int seed)
   {
     unsigned int s = seed;
@@ -250,7 +258,7 @@ namespace stolmine
     }
   }
 
-  __attribute__((optimize("O1")))
+  ER301_OPTIMIZE_O1
   static void combRecomputeTaps(float *pos, float *weight,
                                 int density, int pattern, int slope)
   {

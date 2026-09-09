@@ -78,6 +78,7 @@ endif
 CFLAGS += $(CFLAGS.common) $(CFLAGS.$(ARCH)) $(CFLAGS.$(PROFILE))
 CFLAGS += $(addprefix -I,$(INCLUDES))
 CFLAGS += -Wno-unused-variable -Wno-unused-parameter
+CXXFLAGS = $(CFLAGS)
 # Append -fno-tree-vectorize LAST so it wins against the -ftree-vectorize that
 # CFLAGS.speed added earlier. On am335x this is the TOP-PRIORITY NEON-safety
 # rule (feedback_disable_tree_vectorize_am335x). On linux it also stops -msse4
@@ -88,7 +89,7 @@ ifneq ($(filter $(ARCH),am335x linux),)
 CFLAGS += -fno-tree-vectorize
 endif
 
-SWIGFLAGS = -lua -no-old-metatable-bindings -nomoduleglobal -small -fvirtual
+SWIGFLAGS = -lua -nomoduleglobal -small -fvirtual
 SWIGFLAGS += $(addprefix -I,$(INCLUDES))
 
 CFLAGS.swig = $(CFLAGS.common) $(CFLAGS.$(ARCH)) $(CFLAGS.size)
@@ -112,7 +113,7 @@ $(PACKAGE_FILE): $(LIB_FILE) $(ASSETS)
 $(OUT_DIR)/%.o: %.cpp
 	@echo [C++ $<]
 	@mkdir -p $(@D)
-	@$(CPP) $(CFLAGS) -std=gnu++11 -c $< -o $@
+	@$(CPP) $(CXXFLAGS) -std=gnu++11 -c $< -o $@
 
 $(OUT_DIR)/%.o: %.c
 	@echo [CC $<]

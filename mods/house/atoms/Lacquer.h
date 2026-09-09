@@ -173,8 +173,6 @@ namespace house
       double worldRate = 1.0 + cutKnob * 7.0;          // [1.0, 8.0]
       double cycleStep = 1.0 / worldRate;
       double cojonesScalar = 0.5 + cutKnob * 2.5;      // [0.5, 3.0]
-      const double kBodyScalar = 0.3;
-      const double kBreathyScalar = 0.2;
       const float kBodyScalarF = 0.3f, kBreathyScalarF = 0.2f;
 
       // Polish: continuous knob 0..1 → fatness 3..32 (int) AND
@@ -223,14 +221,12 @@ namespace house
       // Decimation LPF alpha — gives roughly ~10kHz cutoff at 96k
       // bracket-rate, which is below 48k Nyquist of host. Anti-alias
       // attenuation of frequencies above ~12kHz before sample-drop.
-      const double kDecimateAlpha = 0.5;
       const float kDecimateAlphaF = 0.5f;
 
       // Bake block-rate params to float for the pure-float per-sample path (hybrid-float;
       // invFatnessAndScale stays double - it multiplies large int sums in runTapeFat).
       float driveGainF = (float)driveGain;
-      float cycleStepF = (float)cycleStep;
-      float cojonesScalarF = (float)cojonesScalar;
+      const float cojonesScalarF = (float)cojonesScalar;
       float tapeFatWetF = (float)tapeFatWet, tapeFatDryF = (float)tapeFatDry;
       float lowBoostF = (float)lowBoost, lowLpAlphaF = (float)lowLpAlpha;
       float mixF = (float)mix, oneMinusMixF = (float)oneMinusMix;

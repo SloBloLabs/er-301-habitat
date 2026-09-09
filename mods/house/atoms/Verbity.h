@@ -159,7 +159,7 @@ namespace house
       if (dry < 0.0) dry = 0.0;
       // float bakes for the pure-float per-sample FDN (removes the (double) cast-traps)
       float interpolateF=(float)interpolate, regenF=(float)regen, thunderAmountF=(float)thunderAmount;
-      float lowpassF=(float)lowpass, wetF=(float)wet, dryF=(float)dry;
+      const float lowpassF=(float)lowpass;
 
       delayI = (int)(3407.0 * size);
       delayJ = (int)(1823.0 * size);

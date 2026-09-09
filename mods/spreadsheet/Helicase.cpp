@@ -384,7 +384,8 @@ namespace stolmine
 
     // For expo FM, use block-rate frequency directly
     // For lin FM, slew per-sample for clean pitch tracking
-    float carrierFreq, modFreq;
+    float carrierFreq = 0.0f;
+    float modFreq = 0.0f;
     if (!linFM)
     {
       carrierFreq = targetCarrierFreq;

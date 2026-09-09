@@ -34,7 +34,6 @@ namespace commotio_unit
 
     void Init()
     {
-      memset(this, 0, sizeof(Internal));
       envelope.Init();
       bow.Init();
       blow.Init();
